@@ -4,6 +4,7 @@ import { Product, User } from "./models";
 import { connectToDB } from "./utlis";
 import { redirect } from "next/navigation";
 import bcrypt from "bcrypt";
+import { signIn } from "../auth";
 
 export const addUser = async (formData) => {
   const { username, email, password, phone, address, isAdmin, isActive } =
@@ -167,5 +168,17 @@ export const findOneProductById = async (id) => {
   } catch (error) {
     console.log(error);
     throw new error("Failed get Product By Id");
+  }
+};
+
+export const authenticate = async (prevState,formData) => {
+  const { username, password } = Object.fromEntries(formData);
+
+  console.log(username);
+  try {
+    await signIn("credentials", { username, password });
+  } catch (error) {
+
+    return "Wrong credentials!"
   }
 };
